@@ -315,7 +315,14 @@ public class Compilador extends javax.swing.JFrame {
            gramatica.group("VALORES_LOGICOS"," VERDADERO | FALSO ",true);
             gramatica.group("VALORES_TEXTO"," CADENA ",true);
             gramatica.group("VALORES_DECIMAL"," NUMERO_DECIMAL",true);
-           /* declarar variable */
+            gramatica.group("OPERADORES_ARITMETRICOS",
+                    "OPERADOR_MAS | OPERADOR_MENOS | OPERADOR_MULTIPLICAR | OPERADOR_DIVIDIR");
+            gramatica.group("OPERADORES_LOGICOS","OPERADOR_AND | OPERADOR_OR",true);
+         
+          
+        
+          
+           /* declarar variable ENTERA */
            gramatica.group("DECLARAR_ENTERO","TIPO_DE_DATO_ENTERO IDENTIFICADOR OPERADOR_ASIGNACION VALORES_ENTEROS FIN_DE_SENTENCIA",true);
            //No !
            gramatica.group("DECLARAR_ENTERO","TIPO_DE_DATO_ENTERO IDENTIFICADOR OPERADOR_ASIGNACION VALORES_ENTEROS",true,
@@ -342,69 +349,174 @@ public class Compilador extends javax.swing.JFrame {
             gramatica.group("DECLARAR_ENTERO","TIPO_DE_DATO_ENTERO IDENTIFICADOR OPERADOR_ASIGNACION VALORES_DECIMAL FIN_DE_SENTENCIA",true,
                    9,"Error sintáctico {}: decimal no permitido , ingresa un entero (Linea: # )");
             
-           //ARITMETRICA
-           gramatica.group("OPERACION_ARITMETRICA", 
-                   "VALORES (OPERADOR_MAS | OPERADOR_MENOS | OPERADOR_MULTIPLICAR | OPERADOR_DIVIDIR) VALORES",true);
-           
-           gramatica.group("OPERACION_ARITMETRICA", 
-                   "VALORES (OPERADOR_MAS | OPERADOR_MENOS | OPERADOR_MULTIPLICAR | OPERADOR_DIVIDIR) ",true,9,
-                   "Error sintáctico {}: falta un valor en la operacion de la (Linea: # )");
-           
-           gramatica.group("OPERACION_ARITMETRICA", 
-                   "(OPERADOR_MAS | OPERADOR_MENOS | OPERADOR_MULTIPLICAR | OPERADOR_DIVIDIR) VALORES",true,10,
-                   "Error sintáctico {}: falta un valor en la operacion de la (Linea: # )");
-         
-           //LOGICAA
-           
-           
-           gramatica.group("OPERACION_LOGICA", 
-                   "VALORESL (OPERADOR_ADN | OPERADOR_OR | OPERADOR_DIFERENTEQUE) VALORESL",true);
-           gramatica.group("OPERACION_LOGICA", 
-                   "VALORESL (OPERADOR_ADN | OPERADOR_OR | OPERADOR_DIFERENTEQUE)",true,11,
-                   "Error sintáctico {}: falta un valor en la operacion de la (Linea: # )");
-           
-           gramatica.group("OPERACION_LOGICA", 
-                   "(OPERADOR_ADN | OPERADOR_OR | OPERADOR_DIFERENTEQUE) VALORESL)",true,12,
-                   "Error sintáctico {}: falta un valor en la operacion de la (Linea: # )");
-           
-            gramatica.group("OPERACION_LOGICA", 
-                   "(VALORES OPERADOR_ADN | OPERADOR_OR | OPERADOR_DIFERENTEQUE) VALORES)",true,12,
-                   "Error sintáctico {}: solo valores logicos para esta operacion (Linea: # )");
-            gramatica.group("OPERACION_LOGICA", 
-                   "(VALORES OPERADOR_ADN | OPERADOR_OR | OPERADOR_DIFERENTEQUE) VALORESL)",true,13,
-                   "Error sintáctico {}: solo valores logicos para esta operacion (Linea: # )");
+            ///DECLARAR DECIMAL
             
-             gramatica.group("OPERACION_LOGICA", 
-                   "(VALORESL OPERADOR_ADN | OPERADOR_OR | OPERADOR_DIFERENTEQUE) VALORES)",true,14,
-                   "Error sintáctico {}: solo valores logicos para esta operacion (Linea: # )");
-      
+            gramatica.group("DECLARAR_DECIMAL","TIPO_DE_DATO_DECIMAL IDENTIFICADOR OPERADOR_ASIGNACION VALORES_DECIMAL FIN_DE_SENTENCIA",true);
+           //No !
+           gramatica.group("DECLARAR_DECIMAL","TIPO_DE_DATO_DECIMAL IDENTIFICADOR OPERADOR_ASIGNACION VALORES_DECIMAL",true,
+                   10,"Error sintáctico {}: falta ! en la declaracion de variable (Linea: # )");
+           // no identificador
+           gramatica.group("DECLARAR_DECIMAL","TIPO_DE_DATO_DECIMAL OPERADOR_ASIGNACION VALORES_DECIMAL FIN_DE_SENTENCIA",true,
+                   11,"Error sintáctico {}: falta identificador en la declaracion (Linea: # )");
+           //no valor
+           gramatica.group("DECLARAR_DECIMAL","TIPO_DE_DATO_DECIMAL IDENTIFICADOR OPERADOR_ASIGNACION FIN_DE_SENTENCIA",true,
+                   12,"Error sintáctico {}: falta VALOR en la declaracion (Linea: # )");
+           //no op asignacion
+           gramatica.group("DECLARAR_DECIMAL","TIPO_DE_DATO_DECIMAL IDENTIFICADOR VALORES_DECIMAL FIN_DE_SENTENCIA",true,
+                   13,"Error sintáctico {}: falta operador de asignacion en la declaracion (Linea: # )");
+           //NO TIPO DE DATO
+           gramatica.group("DECLARAR_DECIMAL","IDENTIFICADOR OPERADOR_ASIGNACION VALORES_DECIMAL FIN_DE_SENTENCIA",true,
+                   14,"Error sintáctico {}: falta tipo de dato en la declaracion (Linea: # )");
+           //TIPO DE DATO INCORRECTO
+            gramatica.group("DECLARAR_DECIMAL","TIPO_DE_DATO_DECIMAL IDENTIFICADOR OPERADOR_ASIGNACION VALORES_LOGICOS FIN_DE_SENTENCIA",true,
+                   15,"Error sintáctico {}: booleano no permitido , ingresa un decimal (Linea: # )");
+            //TIPO DE DATO INCORRECTO
+            gramatica.group("DECLARAR_DECIMAL","TIPO_DE_DATO_DECIMAL IDENTIFICADOR OPERADOR_ASIGNACION VALORES_TEXTO FIN_DE_SENTENCIA",true,
+                   16,"Error sintáctico {}: tipo cadena no permitido , ingresa un decimal (Linea: # )");
+            //TIPO DE DATO INCORRECTO
+            gramatica.group("DECLARAR_DECIMAL","TIPO_DE_DATO_DECIMAL IDENTIFICADOR OPERADOR_ASIGNACION VALORES_ENTEROS FIN_DE_SENTENCIA",true,
+                   17,"Error sintáctico {}: Entero no permitido , ingresa un decimal (Linea: # )");
+            
+            //Declarar cadena
+             gramatica.group("DECLARAR_CADENA","TIPO_DE_DATO_CADENA IDENTIFICADOR OPERADOR_ASIGNACION VALORES_TEXTO FIN_DE_SENTENCIA",true);
+           //No !
+           gramatica.group("DECLARAR_CADENA","TIPO_DE_DATO_CADENA IDENTIFICADOR OPERADOR_ASIGNACION VALORES_TEXTO",true,
+                   18,"Error sintáctico {}: falta ! en la declaracion de variable (Linea: # )");
+           // no identificador
+           gramatica.group("DECLARAR_CADENA","TIPO_DE_DATO_CADENA OPERADOR_ASIGNACION VALORES_TEXTO FIN_DE_SENTENCIA",true,
+                   19,"Error sintáctico {}: falta identificador en la declaracion (Linea: # )");
+           //no valor
+           gramatica.group("DECLARAR_CADENA","TIPO_DE_DATO_CADENA IDENTIFICADOR OPERADOR_ASIGNACION FIN_DE_SENTENCIA",true,
+                   20,"Error sintáctico {}: falta VALOR en la declaracion (Linea: # )");
+           //no op asignacion
+           gramatica.group("DECLARAR_CADENA","TIPO_DE_DATO_CADENA IDENTIFICADOR VALORES_TEXTO FIN_DE_SENTENCIA",true,
+                   21,"Error sintáctico {}: falta operador de asignacion en la declaracion (Linea: # )");
+           //NO TIPO DE DATO
+           gramatica.group("DECLARAR_CADENA","IDENTIFICADOR OPERADOR_ASIGNACION VALORES_TEXTO FIN_DE_SENTENCIA",true,
+                   22,"Error sintáctico {}: falta tipo de dato en la declaracion (Linea: # )");
+           //TIPO DE DATO INCORRECTO
+            gramatica.group("DECLARAR_CADENA","TIPO_DE_DATO_CADENA IDENTIFICADOR OPERADOR_ASIGNACION VALORES_LOGICOS FIN_DE_SENTENCIA",true,
+                   23,"Error sintáctico {}: booleano no permitido , ingresa una cadena (Linea: # )");
+            //TIPO DE DATO INCORRECTO
+            gramatica.group("DECLARAR_CADENA","TIPO_DE_DATO_CADENA IDENTIFICADOR OPERADOR_ASIGNACION VALORES_DECIMAL FIN_DE_SENTENCIA",true,
+                   24,"Error sintáctico {}: tipo decimal no permitido , ingresa una cadena (Linea: # )");
+            //TIPO DE DATO INCORRECTO
+            gramatica.group("DECLARAR_CADENA","TIPO_DE_DATO_CADENA IDENTIFICADOR OPERADOR_ASIGNACION VALORES_ENTEROS FIN_DE_SENTENCIA",true,
+                   25,"Error sintáctico {}: Entero no permitido , ingresa una cadena (Linea: # )");
+            
+            
+           //declarar booleano
+ gramatica.group("DECLARAR_BOOLEANO","TIPO_DE_DATO_BOOLEANO IDENTIFICADOR OPERADOR_ASIGNACION VALORES_LOGICOS FIN_DE_SENTENCIA",true);
+           //No !
+           gramatica.group("DECLARAR_BOOLEANO","TIPO_DE_DATO_BOOLEANO IDENTIFICADOR OPERADOR_ASIGNACION VALORES_LOGICOS",true,
+                   26,"Error sintáctico {}: falta ! en la declaracion de variable (Linea: # )");
+           // no identificador
+           gramatica.group("DECLARAR_BOOLEANO","TIPO_DE_DATO_BOOLEANO OPERADOR_ASIGNACION VALORES_LOGICOS FIN_DE_SENTENCIA",true,
+                   27,"Error sintáctico {}: falta identificador en la declaracion (Linea: # )");
+           //no valor
+           gramatica.group("DECLARAR_BOOLEANO","TIPO_DE_DATO_BOOLEANO IDENTIFICADOR OPERADOR_ASIGNACION FIN_DE_SENTENCIA",true,
+                   28,"Error sintáctico {}: falta VALOR en la declaracion (Linea: # )");
+           //no op asignacion
+           gramatica.group("DECLARAR_BOOLEANO","TIPO_DE_DATO_BOOLEANO IDENTIFICADOR VALORES_LOGICOS FIN_DE_SENTENCIA",true,
+                   29,"Error sintáctico {}: falta operador de asignacion en la declaracion (Linea: # )");
+           //NO TIPO DE DATO
+           gramatica.group("DECLARAR_BOOLEANO","IDENTIFICADOR OPERADOR_ASIGNACION VALORES_LOGICOS FIN_DE_SENTENCIA",true,
+                   30,"Error sintáctico {}: falta tipo de dato en la declaracion (Linea: # )");
+           //TIPO DE DATO INCORRECTO
+            gramatica.group("DECLARAR_BOOLEANO","TIPO_DE_DATO_BOOLEANO IDENTIFICADOR OPERADOR_ASIGNACION VALORES_TEXTO FIN_DE_SENTENCIA",true,
+                   31,"Error sintáctico {}: CADENA no permitido , ingresa un BOOLEANO (Linea: # )");
+            //TIPO DE DATO INCORRECTO
+            gramatica.group("DECLARAR_BOOLEANO","TIPO_DE_DATO_BOOLEANO IDENTIFICADOR OPERADOR_ASIGNACION VALORES_DECIMAL FIN_DE_SENTENCIA",true,
+                   32,"Error sintáctico {}: tipo decimal no permitido , ingresa un BOOLEANO (Linea: # )");
+            //TIPO DE DATO INCORRECTO
+            gramatica.group("DECLARAR_BOOLEANO","TIPO_DE_DATO_BOOLEANO IDENTIFICADOR OPERADOR_ASIGNACION VALORES_ENTEROS FIN_DE_SENTENCIA",true,
+                   33,"Error sintáctico {}: Entero no permitido , ingresa un BOOLEANO (Linea: # )");
+            
+           gramatica.delete("TIPO_DE_DATO_ENTERO",34,"Error sintáctico {}: Elimina el TIPO_DE_DATO aislado (Linea: # )");
+           gramatica.delete("TIPO_DE_DATO_DECIMAL",35,"Error sintáctico {}: Elimina el TIPO_DE_DATO aislado (Linea: # )");
+           gramatica.delete("TIPO_DE_DATO_BOOLEANO",36,"Error sintáctico {}: Elimina el TIPO_DE_DATO aislado (Linea: # )");
+           gramatica.delete("TIPO_DE_DATO_CADENA",37,"Error sintáctico {}: Elimina el TIPO_DE_DATO aislado (Linea: # )"); 
+            
+//ARITMETRICA
+gramatica.group("VALORES", " IDENTIFICADOR | VALORES_ENTEROS");
+
+ gramatica.group("OPERACION_ARITMETRICA",
+         " VALORES OPERADORES_ARITMETRICOS VALORES FIN_DE_SENTENCIA",true); 
+ 
+          
+         
+           gramatica.group("OPERACION_ARITMETRICA", 
+                   " VALORES OPERADORES_ARITMETRICOS FIN_DE_SENTENCIA",true,
+                   38,"Error sintáctico {}: falta un valor en la operacion de la (Linea: # )");
+            gramatica.group("OPERACION_ARITMETRICA", 
+                   " IDENTIFICADOR OPERADORES_ARITMETRICOS FIN_DE_SENTENCIA",true,
+                   39,"Error sintáctico {}: falta un valor en la operacion de la (Linea: # )");
+            
+            gramatica.group("OPERACION_ARITMETRICA", 
+                   " VALORES OPERADORES_ARITMETRICOS VALORES_LOGICOS FIN_DE_SENTENCIA",true,
+                   40,"Error sintáctico {}: no se permiten booleanos en operacion arimetricas (Linea: # )");
+            gramatica.group("OPERACION_ARITMETRICA", 
+                   " VALORES OPERADORES_ARITMETRICOS VALORES_TEXTO FIN_DE_SENTENCIA",true,
+                   41,"Error sintáctico {}: no se permiten Cadenas en operacion arimetricas (Linea: # )");
+              //FALTA !
+             gramatica.group("OPERACION_ARITMETRICA", 
+                   " VALORES OPERADORES_ARITMETRICOS VALORES",true,
+                   42,"Error sintáctico {}: falta ! en la (Linea: # )");
+             
+          //LOGICAAAAAA
+          
+           gramatica.group("OPERACION_LOGICA",
+         " VALORES OPERADORES_LOGICOS VALORES_LOGICOS FIN_DE_SENTENCIA",true); 
            
-           gramatica.group("VALORES", " IDENTIFICADOR | VALORES_ENTEROS");
+ gramatica.group("OPERACION_LOGICA",
+         " VALORES OPERADORES_LOGICOS FIN_DE_SENTENCIA",true,
+         43,"Error sintáctico {}: falta un valor en la operacion de la (Linea: # )");
+       gramatica.group("OPERACION_LOGICA",
+         " VALORES OPERADORES_LOGICOS VALORES_LOGICOS",true,
+         44,"Error sintáctico {}: falta ! en la (Linea: # )");   
+       
+       gramatica.group("OPERACION_LOGICA",
+         " VALORES OPERADORES_LOGICOS VALORES_ENTEROS FIN_DE_SENTENCIA",true,
+         45,"Error sintáctico {}: No se permiten enteros en operaciones logicas (Linea: # )");
+       
+            gramatica.group("OPERACION_LOGICA",
+         " VALORES OPERADORES_LOGICOS VALORES_DECIMAL FIN_DE_SENTENCIA",true,
+         46,"Error sintáctico {}: No se permiten decimales en operaciones logicas (Linea: # )");
+            
+             gramatica.group("OPERACION_LOGICA",
+         " VALORES OPERADORES_LOGICOS VALORES_TEXTO FIN_DE_SENTENCIA",true,
+         47,"Error sintáctico {}: No se permiten cadenas en operaciones logicas (Linea: # )");
+           
+           
+           
+           
             gramatica.group("PARAMETROS", "VALORES (COMA VALORES)+");
            
+           
+           
            //FUNCIONES
-           gramatica.group("FUNCIONES", "FUNCION ABRE_PARENTESIS (VALORES | PARAMETROS)? CIERRA_PARENTESIS",true);
+           gramatica.group("FUNCIONES", "FUNCION ABRE_PARENTESIS (VALORES | PARAMETROS | VALORES_TEXTO)? CIERRA_PARENTESIS",true);
            //parentesis abrir
-           gramatica.group("FUNCIONES", "FUNCION (VALORES | PARAMETROS)? CIERRA_PARENTESIS",true,
-                   7,"Error sintáctico {}: falta abrir parentesis  (Linea: # )");
+           gramatica.group("FUNCIONES", "FUNCION (VALORES | PARAMETROS | VALORES_TEXTO)? CIERRA_PARENTESIS",true,
+                   48,"Error sintáctico {}: falta abrir parentesis  (Linea: # )");
            //parentesis cerrar 
-           gramatica.group("FUNCIONES", " FUNCION ABRE_PARENTESIS(VALORES | PARAMETROS)? ",true,
-                   8,"Error sintáctico {}: falta cerrar parentesis  (Linea: # )");
+           gramatica.group("FUNCIONES", " FUNCION ABRE_PARENTESIS(VALORES | PARAMETROS | VALORES_TEXTO)? ",true,
+                   49,"Error sintáctico {}: falta cerrar parentesis  (Linea: # )");
            
            
            //ESTRUCTURAS DE CONTROL
-           gramatica.group("ESTRUCTURA_CONTROL","(INICIO_CONDICIONAL | CICLO_FOR)");
+           gramatica.group("ESTRUCTURA_CONTROL","(INICIO_CONDICIONAL | CICLO_FOR | SEGUIR_CONDICIONAL)");
            
- gramatica.group("ESTRUCTURA_CONTROL_COMP","ESTRUCTURA_CONTROL ABRE_PARENTESIS (VALORES | PARAMETROS ) CIERRA_PARENTESIS ",true);
+ gramatica.group("ESTRUCTURA_CONTROL_COMP","ESTRUCTURA_CONTROL ABRE_PARENTESIS (VALORES | PARAMETROS )? CIERRA_PARENTESIS ",true);
           
      gramatica.group("ESTRUCTURA_CONTROL_COMP","ESTRUCTURA_CONTROL ABRE_PARENTESIS (VALORES | PARAMETROS )  ",true,
-     15,"Error sintáctico {}: falta cerrar parentesis  (Linea: # )"); 
+     50,"Error sintáctico {}: falta cerrar parentesis  (Linea: # )"); 
       gramatica.group("ESTRUCTURA_CONTROL_COMP","ESTRUCTURA_CONTROL (VALORES | PARAMETROS ) CIERRA_PARENTESIS",true,
-     16,"Error sintáctico {}: falta abrir parentesis  (Linea: # )"); 
+     51,"Error sintáctico {}: falta abrir parentesis  (Linea: # )"); 
      gramatica.group("ESTRUCTURA_CONTROL_COMP","ESTRUCTURA_CONTROL",true,
-     17,"Error sintáctico {}: faltan  parentesis ()  (Linea: # )"); 
+     52,"Error sintáctico {}: faltan  parentesis ()  (Linea: # )"); 
      gramatica.group("ESTRUCTURA_CONTROL_COMP","ESTRUCTURA_CONTROL ABRE_PARENTESIS CIERRA_PARENTESIS",true,
-     18,"Error sintáctico {}: faltan parametros o valores  (Linea: # )"); 
+     53,"Error sintáctico {}: faltan parametros o valores  (Linea: # )"); 
           
            
         /* Mostrar gramáticas */
