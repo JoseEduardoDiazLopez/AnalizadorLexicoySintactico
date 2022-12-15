@@ -419,7 +419,8 @@ public class Compilador extends javax.swing.JFrame {
                     break;
                 }
                 textsColor.add(textColor);
-            }
+            } 
+            
         } catch (FileNotFoundException ex) {
             System.out.println("El archivo no Existe " + ex.getMessage());
         } catch (IOException ex) {
