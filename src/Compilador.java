@@ -19,10 +19,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
@@ -119,11 +121,11 @@ public class Compilador extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Componente léxico", "Entrada", "[R, C]"
+                " ID", "Componente Léxico", "Entrada", "[R, C]"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -427,28 +429,44 @@ public class Compilador extends javax.swing.JFrame {
         
         Functions.colorTextPane(textsColor, jtpCode, new Color(255, 255, 255));
     }
-
+    
     private void fillTableTokens() {
+             
         tokens.forEach(token -> {
-            Object[] data = new Object[]{token.getLexicalComp(), token.getLexeme(), "[" + token.getLine() + ", " + token.getColumn() + "]"};
+            
+            Object[] data = new Object[]{1,token.getLexicalComp(), token.getLexeme(), "[" + token.getLine() + ", " + token.getColumn() + "]"};
             Functions.addRowDataInTable(tblTokens, data);
         });
     }
+private int numerrores(){
+    
+   String line = System.getProperty("line.separator");
+   
+String demo = jtaOutputConsole.getText();
 
+       int replace = demo.length() - demo.replace("\n", "").length();
+    
+return replace-3;
+
+}
     private void printConsole() {
         int sizeErrors = errors.size();
         if (sizeErrors > 0) {
             Functions.sortErrorsByLineAndColumn(errors);
             String strErrors = "\n";
-            for (ErrorLSSL error : errors) {
+            for (ErrorLSSL error : errors) { 
                 String strError = String.valueOf(error);
                 strErrors += strError + "\n";
+               
             }
-            jtaOutputConsole.setText("Compilación lista\n" + strErrors + "\n La compilación terminó con ERRORES...");
+             int replace = strErrors.length() - strErrors.replace("\n", "").length();
+             int a=replace-1;
+            jtaOutputConsole.setText("Compilación lista\n" + strErrors + "\n La compilación terminó con " + a +" ERRORES...");
         } else {
             jtaOutputConsole.setText("Compilación sin errores\n");
         }
         jtaOutputConsole.setCaretPosition(0);
+        
     }
 
     private void clearFields() {

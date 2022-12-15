@@ -41,12 +41,9 @@ Numero = 0 | [1-9][0-9]*
 /* IDENTIFICADOR*/
 @{Identificador} { return token(yytext(), "IDENTIFICADOR", yyline, yycolumn); }
 /* TIPOS DE DATO */
-C |
+
 CAD |
-SZ |
 Z |
-R |
-Q |
 D | 
 VOF { return token(yytext(), "TIPO_DE_DATO", yyline, yycolumn); }
 

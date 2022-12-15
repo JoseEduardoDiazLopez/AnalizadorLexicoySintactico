@@ -45,12 +45,8 @@ Numero = 0 | [1-9][0-9]*
 /* IDENTIFICADOR*/
 @{Identificador} { return textColor(yychar, yylength(), new Color(53, 255, 249)); }
 /* TIPOS DE DATO */
-C |
 CAD |
-SZ |
 Z |
-R |
-Q |
 D | 
 VOF { return textColor(yychar, yylength(), new Color(255, 198, 6)); }
 
