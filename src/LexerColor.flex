@@ -33,6 +33,7 @@ Identificador = {Letra}({Letra}|{Digito})*
 P=[.]
 /* Número */
 Numero = 0 | [1-9][0-9]*
+N=[0-9]*
 %%
 
 /* Comentarios o espacios en blanco */
@@ -52,7 +53,7 @@ VOF { return textColor(yychar, yylength(), new Color(255, 198, 6)); }
 
 /* NUMERO*/
  0 | [1-9][0-9]* { return textColor(yychar, yylength(), new Color(255, 255, 0)); }
-
+{Numero}.[0]*{Numero}  { return textColor(yychar, yylength(), new Color(255, 255, 0)); }
 /*COLORES*/
 BLANCO |
 GRISCLARO |
@@ -91,6 +92,9 @@ MEN1 { return textColor(yychar, yylength(), new Color(116, 254, 1)); }
 
 /*PUNTUACION */
 "!" { return textColor(yychar, yylength(), new Color(190, 66, 0)); }
+
+/*CADENA*/
+'({Letra}|{Digito}|{EspacioEnBlanco})*' {return textColor(yychar, yylength(), new Color(255, 255, 255)); }
 
 /*PALABRAS RESERVADAS*/
 

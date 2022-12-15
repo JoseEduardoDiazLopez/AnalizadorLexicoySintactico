@@ -9,6 +9,7 @@ import compilerTools.Token;
     private Token token(String lexeme, String lexicalComp, int line, int column){
         return new Token(lexeme, lexicalComp, line+1, column+1);
     }
+
 %}
 /* Variables básicas de comentarios y espacios */
 TerminadorDeLinea = \r|\n|\r\n
@@ -30,6 +31,7 @@ Identificador = {Letra}({Letra}|{Digito})*
 P=[.]
 /* Número */
 Numero = 0 | [1-9][0-9]*
+N=[0-9]*
 %%
 
 
@@ -42,14 +44,17 @@ Numero = 0 | [1-9][0-9]*
 @{Identificador} { return token(yytext(), "IDENTIFICADOR", yyline, yycolumn); }
 /* TIPOS DE DATO */
 
-CAD |
-Z |
-D | 
-VOF { return token(yytext(), "TIPO_DE_DATO", yyline, yycolumn); }
+'({Letra}|{Digito}|{EspacioEnBlanco})*' {return token(yytext(), "CADENA", yyline, yycolumn); }
+
+CAD { return token(yytext(), "TIPO_DE_DATO_CADENA", yyline, yycolumn); }
+Z { return token(yytext(), "TIPO_DE_DATO_ENTERO", yyline, yycolumn); }
+D { return token(yytext(), "TIPO_DE_DATO_DECIMAL", yyline, yycolumn); } 
+VOF { return token(yytext(), "TIPO_DE_DATO_BOOLEANO", yyline, yycolumn); }
 
 /* NUMERO*/
  0 | [1-9][0-9]* { return token(yytext(), "NUMERO", yyline, yycolumn); }
 
+{Numero}.[0]*{Numero} { return token(yytext(), "NUMERO_DECIMAL", yyline, yycolumn); }
 /*COLORES*/
 BLANCO |
 GRISCLARO |
@@ -106,7 +111,6 @@ CHANGE
 
 /* FUNCION */
 F_{Letra}({Letra}|{Digito})* {return token(yytext(), "FUNCION", yyline, yycolumn); }
-
 /*ERRORES*/
 
 /*identificador no valido*/

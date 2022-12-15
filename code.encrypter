@@ -1,18 +1,20 @@
-F_FuncionSuma(
-Z @A EQU 1
-Z @B EQU 2!
+F_FuncionSuma()
+Z @A EQU 1!   
+Z @B EQU 1 !
 @A MAS @B!
-
 F_FuncionAnd()
 VOF @Y EQU v!
-VOF X EQU f!
+VOF @X EQU f
 @Y  Y  @X!
 
-Ciclar(5
-@A MAS 1
+F_Nombre()
+CAD @Nombre EQU  'Eduardo'
+F_Estructuras()
+Ciclar(5)
+@A MAS 1!
 
-Cond(1,0,2)
-Z @X EQU f!
+Cond(@A,0,@B)
+@A MAS 1!
 
 
 

@@ -307,30 +307,41 @@ public class Compilador extends javax.swing.JFrame {
         Grammar gramatica = new Grammar(tokens, errors);
           /* Eliminar errores */
           gramatica.delete(new String[]{"ERROR_1","ERROR_2","ERROR_3"},1);
+          /* agrupar identificadores y parametros */
+           
+          
             /* agrupar valores */
-          gramatica.group("VALORES","(NUMERO | COLOR | VERDADERO | FALSO)",true);
+          gramatica.group("VALORES_ENTEROS"," NUMERO ",true);
+           gramatica.group("VALORES_LOGICOS"," VERDADERO | FALSO ",true);
+            gramatica.group("VALORES_TEXTO"," CADENA ",true);
+            gramatica.group("VALORES_DECIMAL"," NUMERO_DECIMAL",true);
            /* declarar variable */
-           gramatica.group("VARIABLE","TIPO_DE_DATO IDENTIFICADOR OPERADOR_ASIGNACION VALORES FIN_DE_SENTENCIA",true);
+           gramatica.group("DECLARAR_ENTERO","TIPO_DE_DATO_ENTERO IDENTIFICADOR OPERADOR_ASIGNACION VALORES_ENTEROS FIN_DE_SENTENCIA",true);
            //No !
-           gramatica.group("VARIABLE","TIPO_DE_DATO IDENTIFICADOR OPERADOR_ASIGNACION VALORES ",true,
+           gramatica.group("DECLARAR_ENTERO","TIPO_DE_DATO_ENTERO IDENTIFICADOR OPERADOR_ASIGNACION VALORES_ENTEROS",true,
                    2,"Error sintáctico {}: falta ! en la declaracion de variable (Linea: # )");
            // no identificador
-           gramatica.group("VARIABLE","TIPO_DE_DATO OPERADOR_ASIGNACION VALORES FIN_DE_SENTENCIA",true,
+           gramatica.group("DECLARAR_ENTERO","TIPO_DE_DATO_ENTERO OPERADOR_ASIGNACION VALORES_ENTEROS FIN_DE_SENTENCIA",true,
                    3,"Error sintáctico {}: falta identificador en la declaracion (Linea: # )");
            //no valor
-           gramatica.group("VARIABLE","TIPO_DE_DATO IDENTIFICADOR OPERADOR_ASIGNACION FIN_DE_SENTENCIA",true,
+           gramatica.group("DECLARAR_ENTERO","TIPO_DE_DATO_ENTERO IDENTIFICADOR OPERADOR_ASIGNACION FIN_DE_SENTENCIA",true,
                    4,"Error sintáctico {}: falta VALOR en la declaracion (Linea: # )");
            //no op asignacion
-           gramatica.group("VARIABLE","TIPO_DE_DATO IDENTIFICADOR VALORES FIN_DE_SENTENCIA",true,
+           gramatica.group("DECLARAR_ENTERO","TIPO_DE_DATO_ENTERO IDENTIFICADOR VALORES_ENTEROS FIN_DE_SENTENCIA",true,
                    5,"Error sintáctico {}: falta operador de asignacion en la declaracion (Linea: # )");
            //NO TIPO DE DATO
-           gramatica.group("VARIABLE","IDENTIFICADOR OPERADOR_ASIGNACION VALORES FIN_DE_SENTENCIA",true,
+           gramatica.group("DECLARAR_ENTERO","IDENTIFICADOR OPERADOR_ASIGNACION VALORES_ENTEROS FIN_DE_SENTENCIA",true,
                    6,"Error sintáctico {}: falta tipo de dato en la declaracion (Linea: # )");
-           
-           /* agrupar identificadores y parametros */
-            gramatica.group("VALORES", "IDENTIFICADOR");
-           gramatica.group("PARAMETROS", "VALORES (COMA VALORES)+");
-           
+           //TIPO DE DATO INCORRECTO
+            gramatica.group("DECLARAR_ENTERO","TIPO_DE_DATO_ENTERO IDENTIFICADOR OPERADOR_ASIGNACION VALORES_LOGICOS FIN_DE_SENTENCIA",true,
+                   7,"Error sintáctico {}: booleano no permitido , ingresa un entero (Linea: # )");
+            //TIPO DE DATO INCORRECTO
+            gramatica.group("DECLARAR_ENTERO","TIPO_DE_DATO_ENTERO IDENTIFICADOR OPERADOR_ASIGNACION VALORES_TEXTO FIN_DE_SENTENCIA",true,
+                   8,"Error sintáctico {}: tipo cadena no permitido , ingresa un entero (Linea: # )");
+            //TIPO DE DATO INCORRECTO
+            gramatica.group("DECLARAR_ENTERO","TIPO_DE_DATO_ENTERO IDENTIFICADOR OPERADOR_ASIGNACION VALORES_DECIMAL FIN_DE_SENTENCIA",true,
+                   9,"Error sintáctico {}: decimal no permitido , ingresa un entero (Linea: # )");
+            
            //ARITMETRICA
            gramatica.group("OPERACION_ARITMETRICA", 
                    "VALORES (OPERADOR_MAS | OPERADOR_MENOS | OPERADOR_MULTIPLICAR | OPERADOR_DIVIDIR) VALORES",true);
@@ -342,8 +353,9 @@ public class Compilador extends javax.swing.JFrame {
            gramatica.group("OPERACION_ARITMETRICA", 
                    "(OPERADOR_MAS | OPERADOR_MENOS | OPERADOR_MULTIPLICAR | OPERADOR_DIVIDIR) VALORES",true,10,
                    "Error sintáctico {}: falta un valor en la operacion de la (Linea: # )");
+         
            //LOGICAA
-           gramatica.group("VALORESL","VERDADERO FALSO",true);
+           
            
            gramatica.group("OPERACION_LOGICA", 
                    "VALORESL (OPERADOR_ADN | OPERADOR_OR | OPERADOR_DIFERENTEQUE) VALORESL",true);
@@ -367,7 +379,8 @@ public class Compilador extends javax.swing.JFrame {
                    "Error sintáctico {}: solo valores logicos para esta operacion (Linea: # )");
       
            
-           
+           gramatica.group("VALORES", " IDENTIFICADOR | VALORES_ENTEROS");
+            gramatica.group("PARAMETROS", "VALORES (COMA VALORES)+");
            
            //FUNCIONES
            gramatica.group("FUNCIONES", "FUNCION ABRE_PARENTESIS (VALORES | PARAMETROS)? CIERRA_PARENTESIS",true);
@@ -430,12 +443,53 @@ public class Compilador extends javax.swing.JFrame {
         
         Functions.colorTextPane(textsColor, jtpCode, new Color(255, 255, 255));
     }
-    
+    public String id(String n){
+        if(n.equals("IDENTIFICADOR")){return "1";}
+        if(n.equals("CADENA")){return "2";}
+        if(n.equals("TIPO_DE_DATO_ENTERO")){return "3";}
+        if(n.equals("NUMERO")){return "4";}
+        if(n.equals("COLOR")){return "5";}
+        if(n.equals("LLAVE_ABIERTA")){return "6";}
+        if(n.equals("LLAVE_CERRADA")){return "7";}
+        if(n.equals("OPERADOR_ASIGNACION")){return "8";}
+        if(n.equals("OPERADOR_MAS")){return "9";}
+        if(n.equals("OPERADOR_MENOS")){return "10";}
+        if(n.equals("OPERADOR_MULTIPLICAR")){return "11";}
+        if(n.equals("OPERADOR_DIVIDIR")){return "12";}
+        if(n.equals("OPERADOR_AND")){return "13";}
+        if(n.equals("OPERADOR_OR")){return "14";}
+        if(n.equals("OPERADOR_DIFERENTEQUE")){return "15";}
+        if(n.equals("OPERADOR_MAYORQUE")){return "16";}
+        if(n.equals("OPERADOR_MENORQUE")){return "17";}
+        if(n.equals("OPERADOR_INCREMENTO")){return "18";}
+        if(n.equals("OPERADOR_DECREMENTO")){return "19";}
+        if(n.equals("FIN_DE_SENTENCIA")){return "20";}
+        if(n.equals("COMA")){return "1";}
+        if(n.equals("ABRE_PARENTESIS")){return "21";}
+        if(n.equals("CIERRA_PARENTESIS")){return "22";}
+        if(n.equals("INICIO_CONDICIONAL")){return "23";}
+        if(n.equals("SEGUIR_CONDICIONAL")){return "24";}
+        if(n.equals("CICLO_WHILE")){return "25";}
+        if(n.equals("CICLO_FOR")){return "26";}
+        if(n.equals("CICLO_DOWHILE")){return "27";}
+        if(n.equals("PALABRA_RESERVADA")){return "28";}
+        if(n.equals("VERDADERO")){return "29";}
+        if(n.equals("FALSO")){return "30";}
+        if(n.equals("FUNCION")){return "31";}
+        if(n.equals("ERROR_1")){return "32";}
+        if(n.equals("ERROR_2")){return "33";}
+        if(n.equals("ERROR_3")){return "34";}
+        if(n.equals("TIPO_DE_DATO_CADENA")){return "35";}
+        if(n.equals("TIPO_DE_DATO_BOOLEANO")){return "36";}
+        if(n.equals("TIPO_DE_DATO_DECIMAL")){return "37";}
+        if(n.equals("NUMERO_DECIMAL")){return "38";}
+        return "";
+    }
     private void fillTableTokens() {
              
         tokens.forEach(token -> {
-            
-            Object[] data = new Object[]{1,token.getLexicalComp(), token.getLexeme(), "[" + token.getLine() + ", " + token.getColumn() + "]"};
+           
+            Object[] data = new Object[]{id(token.getLexicalComp()),token.getLexicalComp(), token.getLexeme(), "[" + token.getLine() + ", " + token.getColumn() + "]"};
             Functions.addRowDataInTable(tblTokens, data);
         });
     }
